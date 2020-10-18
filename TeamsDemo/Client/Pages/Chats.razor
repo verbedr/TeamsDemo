@@ -1,0 +1,50 @@
+﻿@page "/chats"
+@inject HttpClient Http
+
+<h1>List chats</h1>
+<button class="btn btn-primary" @onclick="ListChats">Fetch chats</button>
+
+<p>Current count: @chats.Count (only last 20 are shown)</p>
+
+<ul>
+    @foreach (var chat in chats)
+    {
+        <li> @chat.CreatedDateTime <button class="btn" @onclick="() => ShowMembers(chat.Id)">members</button> <button class="btn" @onclick="() => ShowMessages(chat.Id)">messages</button></li>
+    }
+</ul>
+
+<ul>
+    @foreach (var member in members)
+    {
+        <li> @member.DisplayName</li>
+    }
+</ul>
+
+<ul>
+    @foreach (var messages in messages)
+    {
+    <li> @messages.CreatedDateTime @messages.Subject</li>
+    }
+</ul>
+
+
+@code {
+    private List<Chat> chats = new List<Chat>();
+    private List<ConversationMember> members = new List<ConversationMember>();
+    private List<ChatMessage> messages = new List<ChatMessage>();
+
+    private async Task ListChats()
+    {
+        chats = await Http.GetFromJsonAsync<List<Chat>>("api/user/chats");
+    }
+
+    private async Task ShowMembers(string id)
+    {
+        members = await Http.GetFromJsonAsync<List<ConversationMember>>($"api/user/chats/{id}/members");
+    }
+
+    private async Task ShowMessages(string id)
+    {
+        messages = await Http.GetFromJsonAsync<List<ChatMessage>>($"api/user/chats/{id}/messages");
+    }
+}
