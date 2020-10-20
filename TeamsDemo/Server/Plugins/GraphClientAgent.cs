@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.Graph.Auth;
+using Microsoft.Graph.CallRecords;
 
 namespace TeamsDemo.Server.Plugins
 {
@@ -54,6 +55,25 @@ namespace TeamsDemo.Server.Plugins
         public async Task<IList<Chat>> ListChats()
         {
             return await Users[_options.Value.UserId].Chats.Request().GetAsync();
+        }
+
+        public async Task<CallRecord> GetCallRecord(string meetNowId)
+        {
+            return await Communications.CallRecords[meetNowId].Request().GetAsync();
+        }
+
+        public async Task SubscribeCallRecords()
+        {
+            var subscription = new Subscription
+            {
+                ChangeType = "created",
+                NotificationUrl = "https://TeamsDemoServer20201020142433.azurewebsites.net/webhook",
+                Resource = "communications/callRecords",
+                ExpirationDateTime = DateTimeOffset.Now.AddHours(1),
+                ClientState = "secretClientValue",
+                LatestSupportedTlsVersion = "v1_2"
+            };
+            await Subscriptions.Request().AddAsync(subscription);
         }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Graph.CallRecords;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TeamsDemo.Server.Plugins;
@@ -29,7 +30,6 @@ namespace TeamsDemo.Server.Controllers
         public async Task<Shared.OnlineMeeting> Create()
         {
             var item = await _agent.StartOnlineMeeting();
-            //var subscription = await _agent.CreateSubscription(item.ChatInfo.ThreadId);
             await _hub.Clients.All.SendAsync("notify", "connected");
             return _mapper.Map<Shared.OnlineMeeting>(item);
         }
@@ -41,6 +41,18 @@ namespace TeamsDemo.Server.Controllers
             return _mapper.Map<IEnumerable<Shared.Chat>>(list);
         }
 
-        
+        [HttpGet("callrecords/{id}")]
+        public async Task<Shared.CallRecord> CallRecord(string id)
+        {
+            var item = await _agent.GetCallRecord(id);
+            return _mapper.Map<Shared.CallRecord>(item);
+        }
+
+        [HttpPost("subscriptions/callRecords")]
+        public async Task SubscribeCallRecords()
+        {
+            await _agent.SubscribeCallRecords();
+        }
+
     }
 }

@@ -16,13 +16,13 @@ namespace TeamsDemo.Shared
         //public IChatMessageHostedContentsCollectionPage HostedContents { get; set; }
         public DateTimeOffset? LastModifiedDateTime { get; set; }
         //public ChatMessageImportance? Importance { get; set; }
-        //public IdentitySet From { get; set; }
+        public IdentitySet From { get; set; }
         public string Etag { get; set; }
         public DateTimeOffset? DeletedDateTime { get; set; }
         public DateTimeOffset? CreatedDateTime { get; set; }
         public string ChatId { get; set; }
         //public ChannelIdentity ChannelIdentity { get; set; }
-        //public ItemBody Body { get; set; }
+        public ItemBody Body { get; set; }
         //public IEnumerable<ChatMessageAttachment> Attachments { get; set; }
         public DateTimeOffset? LastEditedDateTime { get; set; }
         //public IChatMessageRepliesCollectionPage Replies { get; set; }

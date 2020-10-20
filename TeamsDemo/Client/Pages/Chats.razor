@@ -21,9 +21,9 @@
 </ul>
 
 <ul>
-    @foreach (var messages in messages)
+    @foreach (var message in messages)
     {
-    <li> @messages.CreatedDateTime @messages.Subject</li>
+    <li> (@message.CreatedDateTime) @message.Body.Content, @message.From.User.DisplayName </li>
     }
 </ul>
 
